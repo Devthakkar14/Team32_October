@@ -1,3 +1,5 @@
+<html>
+    <body onunload=''>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 {% if success %}
 <div> {{ success }} </div>
@@ -5,7 +7,7 @@
 {% if error %}
 <div> {{ error }} </div>
 {% endif %}
-<form method="post">
+<form method="post" autocomplete="off">
  {% csrf_token %}
  {{ form.as_p }}
  <input type='number' name='code' id='id_code' placeholder="Enter Verification Code.." style="display: none;">
@@ -32,3 +34,12 @@
   }
  })
 </script>
+
+<script>
+    //script to protect against DDoS attacks
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
+</body>
+</html>

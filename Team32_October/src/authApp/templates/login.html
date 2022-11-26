@@ -1,6 +1,13 @@
-<form method="post">
+<form method="post" autocomplete="off">
     {% csrf_token %}
     {{ form.as_p }}
     <button>Login</button>
     <div>Don't have an account? <a href="{% url 'authApp:register' %}">Sign up</a>
-   </form>
+</form>
+
+<script>
+    //script to protect against DDoS attacks
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>

@@ -98,4 +98,11 @@
       e.preventDefault();
     };
   </script>
+
+  <script>
+    //script to protect against DDoS attacks
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>
 </html>
