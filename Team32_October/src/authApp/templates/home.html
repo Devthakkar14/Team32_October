@@ -1,0 +1,9 @@
+<div>
+    Welcome {{ user.username }}
+    <p> Name : {{ user.name }} </p>
+    <p> Username : {{ user.username }} </p>
+    <p> Email : {{ user.email }} </p>
+    <p> Blood : {{ user.blood }}</p>
+   </div>
+
+   <div>To logout, <a href="{% url 'authApp:logout' %}">Click Here</a></div>

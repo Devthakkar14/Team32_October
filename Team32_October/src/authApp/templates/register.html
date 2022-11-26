@@ -1,0 +1,34 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% if success %}
+<div> {{ success }} </div>
+{% endif %}
+{% if error %}
+<div> {{ error }} </div>
+{% endif %}
+<form method="post">
+ {% csrf_token %}
+ {{ form.as_p }}
+ <input type='number' name='code' id='id_code' placeholder="Enter Verification Code.." style="display: none;">
+ <button id='regBtn'>Register</button>
+ <div>Already have an account? <a href="{% url 'authApp:login' %}">Sign in</a>
+</form>
+<script>
+ $('#regBtn').on('click', function(e){
+  if($("#id_code").css('display')=='none'){
+   e.preventDefault();
+   var dataToGo = $('#id_email').val();
+   console.log(dataToGo);
+   $.ajax({
+           url: "{% url 'authApp:ajax_generate_code' %}",
+           type: 'GET',
+           data: dataToGo,
+           success: function (data) {
+               $('#id_code').css('display', 'block');
+           },
+           cache: false,
+           contentType: false,
+           processData: false
+        });
+  }
+ })
+</script>

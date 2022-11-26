@@ -1,0 +1,6 @@
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>Login</button>
+    <div>Don't have an account? <a href="{% url 'authApp:register' %}">Sign up</a>
+   </form>
