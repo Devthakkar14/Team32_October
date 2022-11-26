@@ -54,8 +54,10 @@ def login(request):
    request.session['user_id'] = user.id
    return redirect('authApp:home')
  return render(request, 'login.html', {'form': form})
+
 def get_user(request):
  return User.objects.get(id=request.session['user_id'])
+
 def home(request):
  if 'user_id' in request.session:
   user = get_user(request)
