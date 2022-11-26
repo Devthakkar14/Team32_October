@@ -39,7 +39,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "authApp",
     "fileupload",
-
 ]
 
 MIDDLEWARE = [
@@ -132,3 +131,6 @@ EMAIL_HOST_USER = "dev20052@iiitd.ac.in"
 EMAIL_HOST_PASSWORD = "Devrocks9.1"
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
+
+RAZOR_KEY_ID = "rzp_test_pvpITPy5eu8WoL"
+RAZOR_KEY_SECRET = "knpwD3m03n5CQWXIUUEE03mO"
