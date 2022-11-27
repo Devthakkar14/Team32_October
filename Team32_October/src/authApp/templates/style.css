@@ -1,0 +1,49 @@
+banner{
+    position: absolute;
+    width: 1508px;
+    height: 131px;
+    left: 0px;
+    top: 0px;
+
+    background: #FCFAF9;
+}
+
+banner_text {
+    position: absolute;
+    width: 526px;
+    height: 103px;
+    left: 137px;
+    top: 26px;
+
+    font-family: 'Mariya';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 64px;
+    line-height: 86px;
+
+    color: #000000;
+
+}
+
+bod{
+    width: 485px;
+    height: 53px;
+
+    font-family: 'Roboto Slab';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 53px;
+    /* identical to box height */
+
+
+    color: #000000;
+
+
+    /* Inside auto layout */
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+

@@ -13,6 +13,9 @@ from django.http import HttpResponse, HttpResponseBadRequest
 
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
+def homepage(request):
+    return render(request, 'homepage.html')
+
 @user_login_required
 def home(request):
  user = get_user(request)
