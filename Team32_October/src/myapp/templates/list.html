@@ -6,15 +6,18 @@
     </head>
 
     <body>
+        <a href="#">Hi {{user.username}}</a>
         <!-- List of uploaded documents -->
         {% if documents %}
             All documents in the database:
             <ul>
-                {% for document in documents %}
-                    {% if document.user == request.user %}
-                        <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
-                    {% endif %}
-                {% endfor %}
+                {% if user.is_authenticated %}
+                    {% for document in documents %}
+                        {% if document.user == request.user %}
+                            <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             </ul>
         {% else %}
             <p>No documents.</p>
