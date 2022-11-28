@@ -1,7 +1,7 @@
 from django import forms
 from .models import User
 from .models import Doctor
-from django.contrib.auth.hashers import make_password, check_password
+from .models import Organization
 
 """hide password field in login form"""
 passwordInputWidget = {
@@ -41,7 +41,7 @@ class LoginForm(forms.ModelForm):
 class DoctorRegisterForm(forms.ModelForm):
   class Meta:
     model = Doctor
-    fields = '__all__'
+    fields = ['name', 'email','username', 'password', 'department']
     widgets = [passwordInputWidget]
     widgets = {
       'name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -59,4 +59,27 @@ class DoctorLoginForm(forms.ModelForm):
     widgets = {
       'password': forms.PasswordInput(attrs={'class': 'form-control'}),
     }
+
+class OrganizationRegisterForm(forms.ModelForm):
+  class Meta:
+    model = Organization
+    fields = ['name', 'email','username', 'password', 'Organization_Type']
+    widgets = [passwordInputWidget]
+    widgets = {
+      'name': forms.TextInput(attrs={'class': 'form-control'}),
+      'email': forms.EmailInput(attrs={'class': 'form-control'}),
+      'username': forms.TextInput(attrs={'class': 'form-control'}),
+      'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+      'Organization_Type': forms.TextInput(attrs={'class': 'form-control'}),
+    }
+
+class OrganizationLoginForm(forms.ModelForm):
+  class Meta:
+    model = Organization
+    fields = ['username', 'password']
+    widgets = [passwordInputWidget]
+    widgets = {
+      'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+    }
+
 

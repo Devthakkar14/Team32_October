@@ -6,21 +6,21 @@
 </head>
 <body>
     <div class="banner">
-        <div class="logo"><img src="C:\Users\devth\Desktop\fcs\Team32_October\Team32_October\src\media\logo.png" width="200" height="100" alt="logo"></div>
+        <div class="logo"><img src="/templates/logo.png" width="200" height="100" alt="logo"></div>
         <div class="banner_text">
             <h1>Tiger Healthcare</h1>
         </div>
     </div>
 
     <div class = "bod">
-        <h2>Welcome Back Doctor!</h2>
+        <h2>Welcome Back!</h2>
     </div>
 
 <form method="post" autocomplete="off">
     {% csrf_token %}
     {{ form.as_p }}
     <button>Login</button>
-    <div>Don't have an account? <a href="{% url 'authApp:doctorregistration' %}">Sign up</a>
+    <div>Don't have an account? <a href="{% url 'authApp:organizationregister' %}">Sign up</a>
 </form>
 
 <script>

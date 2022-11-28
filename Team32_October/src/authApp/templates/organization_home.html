@@ -1,0 +1,8 @@
+<div>
+    Welcome {{ organization.username }}
+    <p> Name : {{ organization.name }} </p>
+    <p> Username : {{ organization.username }} </p>
+    <p> Email : {{ organization.email }} </p>
+    <p> Department : {{ organization.Organization_Type }}</p>
+   </div>
+   <div>To logout, <a href="{% url 'authApp:organizationlogout' %}">Click Here</a></div>

@@ -12,7 +12,7 @@
  {{ form.as_p }}
  <input type='number' name='code' id='id_code' placeholder="Enter Verification Code.." style="display: none;">
  <button id='regBtn'>Register</button>
- <div>Already have an account? <a href="{% url 'authApp:doctorlogin' %}">Sign in</a>
+ <div>Already have an account? <a href="{% url 'authApp:organizationlogin' %}">Sign in</a>
 </form>
 <script>
  $('#regBtn').on('click', function(e){
@@ -21,7 +21,7 @@
    var dataToGo = $('#id_email').val();
    console.log(dataToGo);
    $.ajax({
-           url: "{% url 'authApp:ajax_doctor_code' %}",
+           url: "{% url 'authApp:ajax_organization_code' %}",
            type: 'GET',
            data: dataToGo,
            success: function (data) {

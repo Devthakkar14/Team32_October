@@ -4,8 +4,9 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from .models import User
 from .models import Doctor
-from .forms import RegisterForm, LoginForm, DoctorRegisterForm, DoctorLoginForm
-from .decorators import user_login_required
+from .models import Organization      
+from .forms import RegisterForm, LoginForm, DoctorRegisterForm, DoctorLoginForm, OrganizationRegisterForm, OrganizationLoginForm
+from .decorators import user_login_required, doctor_login_required, organization_login_required
 import random
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -33,6 +34,30 @@ def ajax_generate_code(request):
             msg = EmailMultiAlternatives('Verify Email', text_content, EMAIL_HOST_USER, [email])
             msg.send()
     return HttpResponse("success")
+
+def ajax_doctor_code(request):
+    print(request.GET)
+    for x in request.GET:
+        if x!='_':
+            email = x
+            request.session['code'] = random.randint(100000, 999999)
+            text_content = "Your Email Verification Code is " + str(request.session['code'])
+            msg = EmailMultiAlternatives('Verify Email', text_content, EMAIL_HOST_USER, [email])
+            msg.send()
+    return HttpResponse("success")
+
+def ajax_org_code(request):
+    print(request.GET)
+    for x in request.GET:
+        if x!='_':
+            email = x
+            request.session['code'] = random.randint(100000, 999999)
+            text_content = "Your Email Verification Code is " + str(request.session['code'])
+            msg = EmailMultiAlternatives('Verify Email', text_content, EMAIL_HOST_USER, [email])
+            msg.send()
+    return HttpResponse("success")
+
+
 
 def register(request):
     form = RegisterForm()
@@ -147,8 +172,12 @@ def doctorregister(request):
         new_user = form.save(commit=False)
         new_user.password = make_password(new_user.password)
         new_user.save()
-        success = "New User Created Successfully !"
+        success = "Application Submitted Successfully !"
     return render(request, 'doctorregister.html', {'form': form, 'success': success})
+
+def getDoctor(request):
+    return Doctor.objects.get(id=request.session['doctor_id'])
+
 
 #doctor login
 def doctorlogin(request):
@@ -156,24 +185,82 @@ def doctorlogin(request):
  if request.method=='POST':
   username = request.POST['username']
   password = request.POST['password']
+  is_logged_in = True
   if Doctor.objects.filter(username=username).exists() and check_password(password, Doctor.objects.get(username=username).password):
    doctor = Doctor.objects.get(username=username)
    request.session['doctor_id'] = doctor.id
-   return redirect('authApp:doctorhome')
+   if is_logged_in:
+    return redirect('authApp:doctorhomepage')
+   else:
+    return redirect('authApp:waiting')
  return render(request, 'doctor_login.html', {'form': form})
 
-
+@doctor_login_required
 def doctorhome(request):
-    if 'user_id' in request.session:
-        user = get_user(request)
-        return render(request, 'doctorhome.html', {'user': user})
+    is_logged_in = Doctor.objects.get(id=request.session['doctor_id']).is_logged_in
+    if is_logged_in == True:
+        doctor = getDoctor(request)
+        return render(request, 'doctor_home.html', {'doctor': doctor})
     else:
-        return redirect('authApp:doctorlogin')
+        return redirect('authApp:waiting')
 
 def doctorlogout(request):
-    if 'user_id' in request.session:
-        del request.session['user_id'] 
+    if 'doctor_id' in request.session:
+        del request.session['doctor_id'] 
     return redirect('authApp:doctorlogin')
 
 def landing_page(request):
     return render(request, 'landing_page.html')
+
+def waiting(request):
+    return render(request, 'waiting.html')
+
+def organization_register(request):
+    form = OrganizationRegisterForm()
+    success = None
+    if request.method=='POST':
+        if Organization.objects.filter(username=request.POST['username']).exists():
+            error = "This username is already taken"
+            return render(request, 'organization_register.html', {'form': form, 'error': error})
+        if Organization.objects.filter(email=request.POST['email']).exists():
+            error = "This email is already taken"
+            return render(request, 'organization_register.html', {'form': form, 'error': error})
+    
+        if (not 'code' in request.POST) or (not 'code' in request.session) or (not request.POST['code']==str(request.session['code'])):
+            error = "Invalid Verification Code"
+            return render(request, 'organization_register.html', {'form': form, 'error': error})
+        form = OrganizationRegisterForm(request.POST)
+        new_user = form.save(commit=False)
+        new_user.password = make_password(new_user.password)
+        new_user.save()
+        success = "Application Submitted Successfully !"
+    return render(request, 'organization_register.html', {'form': form, 'success': success})
+
+def getOrganization(request):
+    return Organization.objects.get(id=request.session['organization_id'])
+
+def organization_login(request):
+ form = OrganizationLoginForm()
+ if request.method=='POST':
+  username = request.POST['username']
+  password = request.POST['password']
+  if Organization.objects.filter(username=username).exists() and check_password(password, Organization.objects.get(username=username).password):
+    organization = Organization.objects.get(username=username)
+    request.session['organization_id'] = organization.id
+    return redirect('authApp:organizationhome')
+ return render(request, 'organization_login.html', {'form': form})
+
+@organization_login_required
+def organization_home(request):
+    is_logged_in = Organization.objects.get(id=request.session['organization_id']).is_logged_in
+    if is_logged_in == True:
+        org = getOrganization(request)
+        return render(request, 'organization_home.html', {'organization': org})
+    else:
+        return redirect('authApp:waiting')
+
+def organization_logout(request):
+    if 'organization_id' in request.session:
+        del request.session['organization_id'] 
+    return redirect('authApp:organizationlogin')
+

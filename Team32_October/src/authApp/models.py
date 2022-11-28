@@ -11,7 +11,6 @@ departments=[('Cardiologist','Cardiologist'),
 
 
 class User(models.Model):
-    author = models.ForeignKey('auth.User', null = True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=255)
     email = models.EmailField(max_length=500, unique=True)
     username = models.CharField(max_length=255, unique=True)
@@ -39,4 +38,15 @@ class Doctor(models.Model):
     email = models.EmailField(max_length=500, unique=True)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
-    department = models.CharField(max_length=255)
+    department = models.CharField(max_length=255, choices=departments)
+    is_logged_in = models.BooleanField(default = False)
+
+#create organization model
+class Organization(models.Model):
+    name = models.CharField(max_length=255)
+    Organization_Type = models.CharField(max_length=255)
+    email = models.EmailField(max_length=500, unique=True)
+    username = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    is_logged_in = models.BooleanField(default = False)
+

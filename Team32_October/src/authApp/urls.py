@@ -18,4 +18,12 @@ urlpatterns = [
     path('doctorlogin/', views.doctorlogin, name='doctorlogin'),
     path('doctorlogout/', views.doctorlogout, name='doctorlogout'),
     path('doctorhomepage/', views.doctorhome, name='doctorhomepage'),
+    path('waiting/', views.waiting, name='waiting'),
+    path('ajax_doctor_code/', views.ajax_doctor_code, name='ajax_doctor_code'),
+    path('ajax_org_code/', views.ajax_org_code, name='ajax_organization_code'),
+    path('organizationregister/', views.organization_register, name='organizationregister'),
+    path('organizationlogin/', views.organization_login, name='organizationlogin'),
+    path('organizationlogout/', views.organization_logout, name='organizationlogout'),
+    path('organizationhome/', views.organization_home, name='organizationhome'),
+
 ]
