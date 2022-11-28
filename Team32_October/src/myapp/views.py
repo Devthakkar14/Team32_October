@@ -6,21 +6,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView
 # Create your views here.
 
-class DocumentListView(LoginRequiredMixin, ListView):
-    model = Document
-    template_name = 'list.html'
-    context_object_name = 'documents'
-    ordering = ['-uploaded_at']
-    paginate_by = 5
-
-    def get_queryset(self):
-        return Document.objects.filter(user=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = DocumentForm()
-        return context
-
 
 def my_view(request):
     print(f"Great! You're using Python 3.6+. If you fail here, use the right version.")
@@ -48,7 +33,7 @@ def my_view(request):
     context = {'documents': documents, 'form': form, 'message': message}
     return render(request, 'list.html', context)
 
-def product_list_view(request):
+def docsls(request):
     queryset = Document.objects.filter(user=request.user)
     context = {
         'object_list': queryset

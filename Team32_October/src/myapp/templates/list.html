@@ -11,8 +11,8 @@
             All documents in the database:
             <ul>
                 {% for document in documents %}
-                {% if document.user == request.user %}
-                    <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
+                    {% if document.user == request.user %}
+                        <li><a href="{{ document.docfile.url }}">{{ document.docfile.name }}</a></li>
                     {% endif %}
                 {% endfor %}
             </ul>
@@ -36,6 +36,7 @@
             <p><input type="submit" value="Upload"/></p>
         </form>
         
-        <div>To go back home, <a href="{% url 'authApp:home' %}">Click Here</a></div>
+        <div>To go back home,, <a href="{% url 'authApp:home' %}">Click Here</a></div>
+        <div>See docs  <a href="{% url 'docsls' %}">Click Here</a></div>
     </body>
 </html>
