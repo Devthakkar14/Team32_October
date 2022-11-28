@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import User
 from .models import Doctor
 from .forms import RegisterForm, LoginForm, DoctorRegisterForm, DoctorLoginForm
-from .decorators import user_login_required
+from .decorators import user_login_required, doctor_login_required
 import random
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -156,17 +156,23 @@ def doctorlogin(request):
   if Doctor.objects.filter(username=username, password=password).exists():
    doctor = Doctor.objects.get(username=username)
    request.session['doctor_id'] = doctor.id
-   return redirect('authApp:doctorhome')
+   if is_logged_in:
+    return redirect('authApp:doctorhome')
+   else:
+    return redirect('authApp:waiting')
  return render(request, 'doctor_login.html', {'form': form})
 
-
+@doctor_login_required
 def doctorhome(request):
-    if 'user_id' in request.session:
-        user = get_user(request)
-        return render(request, 'doctorhome.html', {'user': user})
+    doctor = Doctor.objects.get(is_logged_in = False)
+    if doctor.is_logged_in == True:
+        if 'doctor_id' in request.session:
+            user = get_user(request)
+            return render(request, 'doctorhome.html', {'user': user})
+        else:
+            return redirect('authApp:doctorlogin')
     else:
-        return redirect('authApp:doctorlogin')
-
+        return redirect('authApp:waiting')
 def doctorlogout(request):
     if 'user_id' in request.session:
         del request.session['user_id'] 
@@ -174,3 +180,6 @@ def doctorlogout(request):
 
 def landing_page(request):
     return render(request, 'landing_page.html')
+
+def waiting(request):
+    return render(request, 'waiting.html')

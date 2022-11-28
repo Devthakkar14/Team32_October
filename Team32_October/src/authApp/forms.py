@@ -20,6 +20,7 @@ class RegisterForm(forms.ModelForm):
     'phone': forms.TextInput(attrs={'class': 'form-control'}),
     'blood_group': forms.TextInput(attrs={'class': 'form-control'}),
   }
+  
 
 class DocumentForm(forms.Form):
     docfile = forms.FileField(
@@ -40,7 +41,7 @@ class LoginForm(forms.ModelForm):
 class DoctorRegisterForm(forms.ModelForm):
   class Meta:
     model = Doctor
-    fields = '__all__'
+    fields = ['name', 'email','username', 'password', 'department']
     widgets = [passwordInputWidget]
     widgets = {
       'name': forms.TextInput(attrs={'class': 'form-control'}),

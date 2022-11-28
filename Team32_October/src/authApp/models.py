@@ -36,4 +36,6 @@ class Doctor(models.Model):
     email = models.EmailField(max_length=500, unique=True)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
-    department = models.CharField(max_length=255)
+    department = models.CharField(max_length=255, choices=departments)
+    is_logged_in = models.BooleanField(default=False)
+
