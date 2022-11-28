@@ -1,5 +1,6 @@
 from django import forms
 from .models import User
+from .models import Doctor
 
 """hide password field in login form"""
 passwordInputWidget = {
@@ -34,3 +35,27 @@ class LoginForm(forms.ModelForm):
   widgets = {
     'password': forms.PasswordInput(attrs={'class': 'form-control'}),
   }
+
+#create class for doctor
+class DoctorRegisterForm(forms.ModelForm):
+  class Meta:
+    model = Doctor
+    fields = '__all__'
+    widgets = [passwordInputWidget]
+    widgets = {
+      'name': forms.TextInput(attrs={'class': 'form-control'}),
+      'email': forms.EmailInput(attrs={'class': 'form-control'}),
+      'username': forms.TextInput(attrs={'class': 'form-control'}),
+      'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+      'department': forms.TextInput(attrs={'class': 'form-control'}),
+    }
+
+class DoctorLoginForm(forms.ModelForm):
+  class Meta:
+    model = Doctor
+    fields = ['username', 'password']
+    widgets = [passwordInputWidget]
+    widgets = {
+      'password': forms.PasswordInput(attrs={'class': 'form-control'}),
+    }
+

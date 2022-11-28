@@ -10,14 +10,11 @@
 <form method="post" autocomplete="off">
  {% csrf_token %}
  {{ form.as_p }}
- 
  <input type='number' name='code' id='id_code' placeholder="Enter Verification Code.." style="display: none;">
  <button id='regBtn'>Register</button>
  <div>Already have an account? <a href="{% url 'authApp:login' %}">Sign in</a>
 </form>
 <script>
-
-
  $('#regBtn').on('click', function(e){
   if($("#id_code").css('display')=='none'){
    e.preventDefault();

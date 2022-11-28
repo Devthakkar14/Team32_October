@@ -3,7 +3,8 @@ import razorpay
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from .models import User
-from .forms import RegisterForm, LoginForm
+from .models import Doctor
+from .forms import RegisterForm, LoginForm, DoctorRegisterForm, DoctorLoginForm
 from .decorators import user_login_required
 import random
 from django.core.mail import EmailMultiAlternatives
@@ -124,3 +125,52 @@ def paymenthandler(request):
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
+
+#create function for doctorregister
+def doctorregister(request):
+    form = DoctorRegisterForm()
+    success = None
+    if request.method=='POST':
+        if Doctor.objects.filter(username=request.POST['username']).exists():
+            error = "This username is already taken"
+            return render(request, 'doctorregister.html', {'form': form, 'error': error})
+        if Doctor.objects.filter(email=request.POST['email']).exists():
+            error = "This email is already taken"
+            return render(request, 'doctorregister.html', {'form': form, 'error': error})
+    
+        if (not 'code' in request.POST) or (not 'code' in request.session) or (not request.POST['code']==str(request.session['code'])):
+            error = "Invalid Verification Code"
+            return render(request, 'doctorregister.html', {'form': form, 'error': error})
+        form = DoctorRegisterForm(request.POST)
+        new_user = form.save(commit=False)
+        new_user.save()
+        success = "New User Created Successfully !"
+    return render(request, 'doctorregister.html', {'form': form, 'success': success})
+
+#doctor login
+def doctorlogin(request):
+ form = DoctorLoginForm()
+ if request.method=='POST':
+  username = request.POST['username']
+  password = request.POST['password']
+  if Doctor.objects.filter(username=username, password=password).exists():
+   doctor = Doctor.objects.get(username=username)
+   request.session['doctor_id'] = doctor.id
+   return redirect('authApp:doctorhome')
+ return render(request, 'doctor_login.html', {'form': form})
+
+
+def doctorhome(request):
+    if 'user_id' in request.session:
+        user = get_user(request)
+        return render(request, 'doctorhome.html', {'user': user})
+    else:
+        return redirect('authApp:doctorlogin')
+
+def doctorlogout(request):
+    if 'user_id' in request.session:
+        del request.session['user_id'] 
+    return redirect('authApp:doctorlogin')
+
+def landing_page(request):
+    return render(request, 'landing_page.html')

@@ -1,5 +1,12 @@
 from django.db import models
 
+departments=[('Cardiologist','Cardiologist'),
+('Dermatologists','Dermatologists'),
+('Emergency Medicine Specialists','Emergency Medicine Specialists'),
+('Allergists/Immunologists','Allergists/Immunologists'),
+('Surgeon','Surgeon'),
+]
+
 # Create your models here.
 class User(models.Model):
  name = models.CharField(max_length=255)
@@ -23,6 +30,10 @@ class Transaction(models.Model):
 class Document(models.Model):
     docfile = models.FileField(upload_to='documents/%Y/%m/%d')
 
-
-def __str__(self):
-  return self.username
+#create doctor model
+class Doctor(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=500, unique=True)
+    username = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    department = models.CharField(max_length=255)
