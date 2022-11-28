@@ -4,7 +4,6 @@ from django.urls import path, include
 
 app_name = 'authApp'
 urlpatterns = [
-    path('homepage/', views.homepage, name='homepage'),
     path('register/', views.register, name='register'),
     path('login/', views.login, name='login'),
     path('', views.home, name='home'),

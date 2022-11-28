@@ -11,10 +11,10 @@ from django.template.loader import render_to_string
 from mysite.settings import EMAIL_HOST_USER
 from django.http import HttpResponse, HttpResponseBadRequest
 
-razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+from django.shortcuts import redirect, render
 
-def homepage(request):
-    return render(request, 'homepage.html')
+
+razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
 
 @user_login_required
 def home(request):

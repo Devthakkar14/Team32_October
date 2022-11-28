@@ -5,6 +5,9 @@ from .models import User
 passwordInputWidget = {
  'password': forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'})),
 }
+
+class DocumentForm(forms.Form):
+  docfile = forms.FileField(label='Select a file')
 class RegisterForm(forms.ModelForm):
  class Meta:
   model = User
@@ -19,13 +22,6 @@ class RegisterForm(forms.ModelForm):
     'phone': forms.TextInput(attrs={'class': 'form-control'}),
     'blood_group': forms.TextInput(attrs={'class': 'form-control'}),
   }
-
-class DocumentForm(forms.Form):
-    docfile = forms.FileField(
-        label='Select a file',
-        help_text='max. 42 megabytes'
-    )
-
 class LoginForm(forms.ModelForm):
  class Meta:
   model = User

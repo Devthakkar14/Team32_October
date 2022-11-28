@@ -8,6 +8,18 @@
     <title>File Upload</title>
 </head>
 <body>
+    <!-- List of uploaded documents -->
+    {% if fileuploads %}
+    All documents in the database:
+    <ul>
+        {% for file in files %}
+            <li><a href="{{ fileupload.file.url }}">{{ fileupload.file.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No documents.</p>
+{% endif %}
+
     <form method="post"  enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" name="file" id="file">
