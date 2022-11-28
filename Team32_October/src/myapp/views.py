@@ -30,10 +30,12 @@ def my_view(request):
     # Load documents for the list page
     if request.user.is_authenticated:
         documents = Document.objects.filter(user=request.user)
+        # Render list page with the documents and the form
+        context = {'documents': documents, 'form': form, 'message': message}
+        return render(request, 'list.html', context)
+    else:
+        return render(request, 'list.html', {'message': message})
 
-    # Render list page with the documents and the form
-    context = {'documents': documents, 'form': form, 'message': message}
-    return render(request, 'list.html', context)
 
 def docsls(request):
     queryset = Document.objects.filter(user=request.user)

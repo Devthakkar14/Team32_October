@@ -8,6 +8,7 @@
     <title>File Upload</title>
 </head>
 <body>
+    <div>Hi {{user.username}}</div>
     <form method="post"  enctype="multipart/form-data">
         {% csrf_token %}
         <input type="file" name="file" id="file">
