@@ -28,6 +28,7 @@ def my_view(request):
     # Handle file upload
     if request.method == 'POST':
         form = DocumentForm(request.POST, request.FILES)
+        form.user = request.user
         if form.is_valid():
             newdoc = Document(docfile=request.FILES['docfile'])
             newdoc.user = request.user;
@@ -41,12 +42,16 @@ def my_view(request):
         form = DocumentForm()  # An empty, unbound form
 
     # Load documents for the list page
-    documents = Document.objects.all()
-
-    #use queryset to filter the documents by user
-    documents = documents.filter(user=request.user)
+    documents = Document.objects.filter(user=request.user)
 
     # Render list page with the documents and the form
     context = {'documents': documents, 'form': form, 'message': message}
     return render(request, 'list.html', context)
+
+def product_list_view(request):
+    queryset = Document.objects.filter(user=request.user)
+    context = {
+        'object_list': queryset
+    }
+    return render(request, 'doclist.html', context)
 

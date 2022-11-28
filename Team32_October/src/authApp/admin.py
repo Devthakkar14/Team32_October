@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
-from django.apps import apps
-
+from .models import User, Doctor
 
 # Register your models here.
-for model in apps.get_app_config('authApp').get_models():
-    admin.site.register(model)
+admin.site.register(User)
+admin.site.register(Doctor)

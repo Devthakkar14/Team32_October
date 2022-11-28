@@ -5,17 +5,18 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import User
 from .models import Doctor
 from .forms import RegisterForm, LoginForm, DoctorRegisterForm, DoctorLoginForm
-from .decorators import user_login_required, doctor_login_required
+from .decorators import user_login_required
 import random
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from mysite.settings import EMAIL_HOST_USER
 from django.http import HttpResponse, HttpResponseBadRequest
-
-from django.shortcuts import redirect, render
-
+from django.contrib.auth.hashers import make_password, check_password
 
 razorpay_client = razorpay.Client(auth=(settings.RAZOR_KEY_ID, settings.RAZOR_KEY_SECRET))
+
+def homepage(request):
+    return render(request, 'homepage.html')
 
 @user_login_required
 def home(request):
@@ -49,6 +50,7 @@ def register(request):
             return render(request, 'register.html', {'form': form, 'error': error})
         form = RegisterForm(request.POST)
         new_user = form.save(commit=False)
+        new_user.password = make_password(new_user.password)
         new_user.save()
         success = "New User Created Successfully !"
     return render(request, 'register.html', {'form': form, 'success': success})
@@ -58,7 +60,7 @@ def login(request):
  if request.method=='POST':
   username = request.POST['username']
   password = request.POST['password']
-  if User.objects.filter(username=username, password=password).exists():
+  if User.objects.filter(username=username).exists() and check_password(password, User.objects.get(username=username).password):
    user = User.objects.get(username=username)
    request.session['user_id'] = user.id
    return redirect('authApp:home')
@@ -143,6 +145,7 @@ def doctorregister(request):
             return render(request, 'doctorregister.html', {'form': form, 'error': error})
         form = DoctorRegisterForm(request.POST)
         new_user = form.save(commit=False)
+        new_user.password = make_password(new_user.password)
         new_user.save()
         success = "New User Created Successfully !"
     return render(request, 'doctorregister.html', {'form': form, 'success': success})
@@ -153,26 +156,20 @@ def doctorlogin(request):
  if request.method=='POST':
   username = request.POST['username']
   password = request.POST['password']
-  if Doctor.objects.filter(username=username, password=password).exists():
+  if Doctor.objects.filter(username=username).exists() and check_password(password, Doctor.objects.get(username=username).password):
    doctor = Doctor.objects.get(username=username)
    request.session['doctor_id'] = doctor.id
-   if is_logged_in:
-    return redirect('authApp:doctorhome')
-   else:
-    return redirect('authApp:waiting')
+   return redirect('authApp:doctorhome')
  return render(request, 'doctor_login.html', {'form': form})
 
-@doctor_login_required
+
 def doctorhome(request):
-    doctor = Doctor.objects.get(is_logged_in = False)
-    if doctor.is_logged_in == True:
-        if 'doctor_id' in request.session:
-            user = get_user(request)
-            return render(request, 'doctorhome.html', {'user': user})
-        else:
-            return redirect('authApp:doctorlogin')
+    if 'user_id' in request.session:
+        user = get_user(request)
+        return render(request, 'doctorhome.html', {'user': user})
     else:
-        return redirect('authApp:waiting')
+        return redirect('authApp:doctorlogin')
+
 def doctorlogout(request):
     if 'user_id' in request.session:
         del request.session['user_id'] 
@@ -180,6 +177,3 @@ def doctorlogout(request):
 
 def landing_page(request):
     return render(request, 'landing_page.html')
-
-def waiting(request):
-    return render(request, 'waiting.html')
