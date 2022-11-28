@@ -13,7 +13,6 @@ departments=[('Cardiologist','Cardiologist'),
     
 class User(models.Model):
     name = models.CharField(max_length=255)
-    author = models.ForeignKey(User, default = 1, null = True, on_delete = models.SET_NULL)
     email = models.EmailField(max_length=500, unique=True)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
