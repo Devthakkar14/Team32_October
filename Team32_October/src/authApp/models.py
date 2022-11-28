@@ -1,7 +1,13 @@
 from django.db import models
 from django.conf import settings
 
-User = settings.AUTH_USER_MODEL
+departments=[('Cardiologist','Cardiologist'),
+('Dermatologists','Dermatologists'),
+('Emergency Medicine Specialists','Emergency Medicine Specialists'),
+('Allergists/Immunologists','Allergists/Immunologists'),
+('Surgeon','Surgeon'),
+]
+
 # Create your models here.
 
     
@@ -26,6 +32,12 @@ class Transaction(models.Model):
         return super().save(*args, **kwargs)
 
 
+#create doctor model
+class Doctor(models.Model):
+    name = models.CharField(max_length=255)
+    email = models.EmailField(max_length=500, unique=True)
+    username = models.CharField(max_length=255, unique=True)
+    password = models.CharField(max_length=255)
+    department = models.CharField(max_length=255, choices=departments)
+    is_logged_in = models.BooleanField(default=False)
 
-def __str__(self):
-  return self.username

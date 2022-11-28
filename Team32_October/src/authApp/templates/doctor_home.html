@@ -1,0 +1,9 @@
+<div>
+    Welcome {{ doctor.username }}
+    <p> Name : {{ doctor.name }} </p>
+    <p> Username : {{ doctor.username }} </p>
+    <p> Email : {{ doctor.email }} </p>
+    <p> Department : {{ doctor.department }}</p>
+    <p> Phone : {{ doctor.phone }}</p>
+   </div>
+   <div>To logout, <a href="{% url 'authApp:logout' %}">Click Here</a></div>
